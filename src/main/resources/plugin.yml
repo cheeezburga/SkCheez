@@ -1,0 +1,8 @@
+name: SkCheez
+version: '${project.version}'
+main: me.cheezburga.skcheez.SkCheez
+api-version: '1.17'
+depend:
+  - Skript
+authors:
+  - cheezburga
