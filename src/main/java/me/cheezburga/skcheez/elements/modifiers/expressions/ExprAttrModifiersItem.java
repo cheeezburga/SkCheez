@@ -32,11 +32,11 @@ import java.util.List;
         "set {_attackSpeed::*} to modifiers on player's tool where [attribute of input is attack speed]"})
 @Since("1.0.0")
 
-public class ExprAttrModifiersOnItem extends PropertyExpression<ItemType, AttributeModifierWrapper> {
+public class ExprAttrModifiersItem extends PropertyExpression<ItemType, AttributeModifierWrapper> {
 
     static {
-        Skript.registerExpression(ExprAttrModifiersOnItem.class, AttributeModifierWrapper.class, ExpressionType.PROPERTY,
-                "[the] [%-attributetypes/equipmentslots%] [attribute] modifiers (on|of) %itemtype%");
+        Skript.registerExpression(ExprAttrModifiersItem.class, AttributeModifierWrapper.class, ExpressionType.PROPERTY,
+                "[the] [attribute] modifiers (on|of) %itemtype%");
     }
 
     @SuppressWarnings({"NullableProblems", "unchecked"})
@@ -84,7 +84,9 @@ public class ExprAttrModifiersOnItem extends PropertyExpression<ItemType, Attrib
     public void change(Event event, @Nullable Object[] delta, ChangeMode mode) {
         if (mode == ChangeMode.RESET || mode == ChangeMode.DELETE) {
             for (ItemType item : getExpr().getArray(event)) {
-                item.getItemMeta().setAttributeModifiers(null); // unsure if this will work... docs say it should though
+                ItemMeta reset = item.getItemMeta();
+                reset.setAttributeModifiers(null);
+                item.setItemMeta(reset);
             }
         } else if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
             if (delta != null && delta instanceof AttributeModifierWrapper[] wrappers) {
@@ -93,6 +95,8 @@ public class ExprAttrModifiersOnItem extends PropertyExpression<ItemType, Attrib
                     for (AttributeModifierWrapper wrapper : wrappers) {
                         if (mode == ChangeMode.ADD) {
                             meta.addAttributeModifier(wrapper.getAttribute(), wrapper.getModifier());
+                            // throws an IllegalArgumentException stack trace when trying to add a modifier
+                            // to an item which already has a modifier with the same uuid.
                         } else if (mode == ChangeMode.REMOVE) {
                             meta.removeAttributeModifier(wrapper.getAttribute(), wrapper.getModifier());
                         }
