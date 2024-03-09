@@ -7,6 +7,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.skript.lang.util.SimpleExpression;
 import ch.njol.util.Kleenean;
 import me.cheezburga.skcheez.api.wrapper.AttributeModifierWrapper;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.event.Event;
 import org.bukkit.inventory.EquipmentSlot;
@@ -19,10 +20,11 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
 
     static {
         Skript.registerExpression(ExprAttrModifierCreate.class, AttributeModifierWrapper.class, ExpressionType.COMBINED,
-                "[new] attribute modifier (named|with name|with id) %string% with amount %number% with operation %attributemodifieroperation% " +
+                "[new] %attributetype% [attribute] modifier (named|with name|with id) %string% with amount %number% with operation %attributemodifieroperation% " +
                 "[with uuid %-string%] [for [equipment] slot %-equipmentslot%]");
     }
 
+    private Expression<Attribute> type;
     private Expression<String> name;
     private Expression<Number> amount;
     private Expression<AttributeModifier.Operation> operation;
@@ -32,23 +34,25 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
     @SuppressWarnings({"NullableProblems", "unchecked"})
     @Override
     public boolean init(Expression<?>[] exprs, int matchedPattern, Kleenean isDelayed, ParseResult parseResult) {
-        this.name = (Expression<String>) exprs[0];
-        this.amount = (Expression<Number>) exprs[1];
-        this.operation = (Expression<AttributeModifier.Operation>) exprs[2];
-        this.uuid = (Expression<String>) exprs[3];
-        this.slot = (Expression<EquipmentSlot>) exprs[4];
+        this.type = (Expression<Attribute>) exprs[0];
+        this.name = (Expression<String>) exprs[1];
+        this.amount = (Expression<Number>) exprs[2];
+        this.operation = (Expression<AttributeModifier.Operation>) exprs[3];
+        this.uuid = (Expression<String>) exprs[4];
+        this.slot = (Expression<EquipmentSlot>) exprs[5];
         return true;
     }
 
     @SuppressWarnings("NullableProblems")
     @Override
     protected @Nullable AttributeModifierWrapper[] get(Event event) {
-        if (this.name == null || this.amount == null || this.operation == null) return null;
+        if (this.type == null || this.name == null || this.amount == null || this.operation == null) return null;
 
+        Attribute type = this.type.getSingle(event);
         String name = this.name.getSingle(event);
         Number amount = this.amount.getSingle(event);
         AttributeModifier.Operation operation = this.operation.getSingle(event);
-        if (name == null || amount == null || operation == null) return null;
+        if (type == null || name == null || amount == null || operation == null) return null;
 
         AttributeModifier toWrap;
 
@@ -68,7 +72,7 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
         } else {
             toWrap = new AttributeModifier(uuid, name, amount.doubleValue(), operation, slot);
         }
-        return new AttributeModifierWrapper[]{new AttributeModifierWrapper(toWrap)};
+        return new AttributeModifierWrapper[]{new AttributeModifierWrapper(type, toWrap)};
     }
 
     @Override
