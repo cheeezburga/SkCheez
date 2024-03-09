@@ -94,7 +94,7 @@ public class ExprAttrModifierProperties extends SimpleExpression<Object> {
         } else if (pattern == SLOT && (mode == ChangeMode.SET || mode == ChangeMode.RESET)) {
             return CollectionUtils.array(EquipmentSlot.class);
         } else if (pattern == UUID && mode == ChangeMode.SET) {
-            return CollectionUtils.array(String.class);
+            return CollectionUtils.array(String.class, UUID.class);
         }
         return null;
     }
@@ -132,9 +132,13 @@ public class ExprAttrModifierProperties extends SimpleExpression<Object> {
                 wrapper.modifySlot(slot);
             }
         } else if (pattern == UUID && mode == ChangeMode.SET) {
-            if (object instanceof UUID uuid) {
-                wrapper.modifyUUID(uuid);
+            UUID uuid = java.util.UUID.randomUUID();
+            if (object instanceof String s) {
+                uuid = java.util.UUID.fromString(s);
+            } else if (object instanceof UUID u) {
+                uuid = u;
             }
+            wrapper.modifyUUID(uuid);
         }
     }
 
@@ -147,11 +151,10 @@ public class ExprAttrModifierProperties extends SimpleExpression<Object> {
     public @NotNull Class<?> getReturnType() {
         return switch (pattern) {
             case ATTRIBUTE -> Attribute.class;
-            case NAME -> String.class;
+            case NAME, UUID -> String.class;
             case AMOUNT -> Number.class;
             case OPERATION -> AttributeModifier.Operation.class;
             case SLOT -> EquipmentSlot.class;
-            case UUID -> UUID.class;
             default -> throw new IllegalStateException("Unexpected pattern: " + pattern);
         };
     }
