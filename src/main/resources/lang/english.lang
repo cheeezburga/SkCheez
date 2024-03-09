@@ -1,0 +1,6 @@
+version: @version@
+
+types:
+    attributemodifier: attribute modifier¦s
+    attributemodifieroperation: attribute modifier operation¦s
+    equipmentslot: equipment slot¦s
