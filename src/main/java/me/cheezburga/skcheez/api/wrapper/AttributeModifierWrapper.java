@@ -7,7 +7,6 @@ import org.bukkit.inventory.EquipmentSlot;
 
 import java.util.UUID;
 
-@SuppressWarnings("PatternValidation")
 public class AttributeModifierWrapper {
     private Attribute attribute;
     private AttributeModifier modifier;
@@ -63,13 +62,13 @@ public class AttributeModifierWrapper {
 
     @SuppressWarnings("ConstantValue")
     public String toString() {
-        String attribute = getAttribute() != null ? getAttribute().toString().toLowerCase().replace("_", "") : "<none>";
+        String attribute = getAttribute() != null ? getAttribute().toString().toLowerCase().replace("_", " ") : "<none>";
         String name = getModifier().getName() != null ? "\"" + getModifier().getName() + "\"" : "<none>";
         String amount = getModifier().getAmount() != 0 ? String.valueOf(getModifier().getAmount()) : "<none>";
         String operation = getModifier().getOperation() != null ? getModifier().getOperation().toString().toLowerCase().replace("_", "") : "<none>";
         String slot = getModifier().getSlot() != null ? getModifier().getSlot().toString().toLowerCase() : "<none>";
         String uuid = getModifier().getUniqueId() != null ? getModifier().getUniqueId().toString() : "<none>";
 
-        return "attribute modifier for attribute " + attribute + " with name " + name + ", amount " + amount + ", operation " + operation + ", slot " + slot + ", and uuid " + uuid;
+        return attribute + " modifier with name " + name + ", amount " + amount + ", operation " + operation + ", slot " + slot + ", and uuid " + uuid;
     }
 }
