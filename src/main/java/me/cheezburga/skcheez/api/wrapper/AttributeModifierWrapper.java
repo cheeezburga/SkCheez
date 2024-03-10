@@ -66,7 +66,7 @@ public class AttributeModifierWrapper {
         String name = getModifier().getName() != null ? "\"" + getModifier().getName() + "\"" : "<none>";
         String amount = getModifier().getAmount() != 0 ? String.valueOf(getModifier().getAmount()) : "<none>";
         String operation = getModifier().getOperation() != null ? getModifier().getOperation().toString().toLowerCase().replace("_", "") : "<none>";
-        String slot = getModifier().getSlot() != null ? getModifier().getSlot().toString().toLowerCase() : "<none>";
+        String slot = getModifier().getSlot() != null ? getModifier().getSlot().toString().toLowerCase() : "any";
         String uuid = getModifier().getUniqueId() != null ? getModifier().getUniqueId().toString() : "<none>";
 
         return attribute + " modifier with name " + name + ", amount " + amount + ", operation " + operation + ", slot " + slot + ", and uuid " + uuid;
