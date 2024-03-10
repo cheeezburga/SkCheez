@@ -103,9 +103,9 @@ public class ExprAttrModifiersItem extends PropertyExpression<ItemType, Attribut
                             Attribute attribute = wrapper.getAttribute();
                             AttributeModifier modifier = wrapper.getModifier();
                             if (mode == ChangeMode.ADD) {
-                                AttributeModifierWrapper conflict = ModifierUtils.getConflictingModifier(meta, modifier);
+                                AttributeModifier conflict = ModifierUtils.getConflictingModifier(meta, attribute, modifier);
                                 if (conflict != null) {
-                                    meta.removeAttributeModifier(conflict.getAttribute(), conflict.getModifier());
+                                    meta.removeAttributeModifier(attribute, conflict);
                                 }
                                 meta.addAttributeModifier(attribute, modifier);
                             } else if (mode == ChangeMode.REMOVE) {
