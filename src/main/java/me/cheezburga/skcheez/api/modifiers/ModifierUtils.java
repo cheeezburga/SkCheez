@@ -3,14 +3,14 @@ package me.cheezburga.skcheez.api.modifiers;
 import com.google.common.collect.HashMultimap;
 import com.google.common.collect.Multimap;
 import me.cheezburga.skcheez.api.wrapper.AttributeModifierWrapper;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.Collection;
+
 public class ModifierUtils {
-    // add method to get nbt/nbt string from wrapper
     public static Multimap<Attribute, AttributeModifier> convertWrappers(AttributeModifierWrapper[] wrappers) {
         Multimap<Attribute, AttributeModifier> map = HashMultimap.create();
         for (AttributeModifierWrapper wrapper : wrappers) {
@@ -19,26 +19,23 @@ public class ModifierUtils {
         return map;
     }
 
-    public static boolean canAddModifier(ItemMeta meta, AttributeModifier modifier) {
-        // after some testing, this doesn't work as intended
-        // a modifier with an identical uuid CAN be applied to an item if it's for a different attribute
-        // but it CANNOT, without being replaced
-        if (!meta.hasAttributeModifiers()) {
-            return true;
-        } else {
-            Multimap<Attribute, AttributeModifier> map = meta.getAttributeModifiers();
-            if (map != null) {
-                for (AttributeModifier m : map.values()) {
+    public static @Nullable AttributeModifier getConflictingModifier(ItemMeta meta, Attribute attribute, AttributeModifier modifier) {
+        // this initially returned a wrapper, not just the modifier
+        // if there can ever be a conflicting modifier NOT of the same attribute, change back
+        if (!meta.hasAttributeModifiers()) { return null; }
+        else {
+            Collection<AttributeModifier> modifiers = meta.getAttributeModifiers(attribute);
+            if (modifiers != null) {
+                // AttributeModifierWrapper conflict = new AttributeModifierWrapper(attribute);
+                for (AttributeModifier m : modifiers) {
                     if (m.getUniqueId() == modifier.getUniqueId()) {
-                        return false;
+                        // conflict.setModifier(m);
+                        // return conflict;
+                        return m;
                     }
                 }
             }
         }
-        return true;
-    }
-
-    public static @Nullable AttributeModifierWrapper getConflictingModifier(ItemMeta meta, AttributeModifier modifier) {
-        // implement and replace the canaddmodifer method above
+        return null;
     }
 }
