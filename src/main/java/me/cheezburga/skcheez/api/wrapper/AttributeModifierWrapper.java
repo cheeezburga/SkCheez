@@ -1,10 +1,15 @@
 package me.cheezburga.skcheez.api.wrapper;
 
+import me.cheezburga.skcheez.api.util.Utils;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
 import org.bukkit.inventory.EquipmentSlot;
+import org.jetbrains.annotations.Nullable;
 
+import java.util.ArrayList;
+import java.util.List;
+import java.util.StringJoiner;
 import java.util.UUID;
 
 public class AttributeModifierWrapper {
@@ -60,15 +65,35 @@ public class AttributeModifierWrapper {
         modifier = new AttributeModifier(modifier.getUniqueId(), modifier.getName(), modifier.getAmount(), modifier.getOperation(), slot);
     }
 
+    public boolean isValid() {
+        return attribute != null && modifier != null;
+    }
+
+    public @Nullable String getNBTString() {
+        if (!isValid()) { return null; }
+        else {
+            StringJoiner joiner = new StringJoiner(",");
+            joiner.add("{AttributeName:\"" + attribute.toString() + "\"");
+            joiner.add("Name:" + modifier.getName());
+            joiner.add("Amount:" + modifier.getAmount());
+            joiner.add("Operation:" + modifier.getOperation().ordinal());
+            if (modifier.getSlot() != null) { joiner.add("Slot:" + modifier.getSlot().toString()); }
+            joiner.add("UUID:" + Utils.uuidIntArrayToString(Utils.uuidToIntArray(modifier.getUniqueId())) + "}");
+
+            return joiner.toString();
+        }
+    }
+
     @SuppressWarnings("ConstantValue")
     public String toString() {
-        String attribute = getAttribute() != null ? getAttribute().toString().toLowerCase().replace("_", " ") : "<none>";
-        String name = getModifier().getName() != null ? "\"" + getModifier().getName() + "\"" : "<none>";
-        String amount = getModifier().getAmount() != 0 ? String.valueOf(getModifier().getAmount()) : "<none>";
-        String operation = getModifier().getOperation() != null ? getModifier().getOperation().toString().toLowerCase().replace("_", "") : "<none>";
-        String slot = getModifier().getSlot() != null ? getModifier().getSlot().toString().toLowerCase() : "any";
-        String uuid = getModifier().getUniqueId() != null ? getModifier().getUniqueId().toString() : "<none>";
+        String type = (attribute != null) ? attribute.toString().toLowerCase().replace("_", " ") : "";
+        String name = (modifier != null) ? "\"" + modifier.getName() + "\"" : "";
+        String amount = (modifier != null) ? String.valueOf(modifier.getAmount()) : "";
+        String operation = (modifier != null) ? modifier.getOperation().toString().toLowerCase().replace("_", " ") : "";
+        String slot = (modifier != null && modifier.getSlot() != null) ? modifier.getSlot().toString().toLowerCase() : "any";
+        String uuid = (modifier != null) ? modifier.getUniqueId().toString() : "";
 
-        return attribute + " modifier with name " + name + ", amount " + amount + ", operation " + operation + ", slot " + slot + ", and uuid " + uuid;
+        return String.format("%s attribute modifier with name %s, amount %s, operation %s, slot %s, and uuid %s",
+                type, name, amount, operation, slot, uuid);
     }
 }
