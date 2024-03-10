@@ -14,6 +14,7 @@ import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
 import com.google.common.collect.Multimap;
+import me.cheezburga.skcheez.api.modifiers.ModifierUtils;
 import me.cheezburga.skcheez.api.wrapper.AttributeModifierWrapper;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
@@ -35,6 +36,8 @@ import java.util.List;
 public class ExprAttrModifiersItem extends PropertyExpression<ItemType, AttributeModifierWrapper> {
 
     static {
+        // ideally this would be able to get more specific modifiers too
+        // it's a property expression tho so idk if thats doable? can just use a filter in skript tho tbf
         Skript.registerExpression(ExprAttrModifiersItem.class, AttributeModifierWrapper.class, ExpressionType.PROPERTY,
                 "[the] [attribute] modifiers (on|of) %itemtype%");
     }
@@ -88,17 +91,26 @@ public class ExprAttrModifiersItem extends PropertyExpression<ItemType, Attribut
                 reset.setAttributeModifiers(null);
                 item.setItemMeta(reset);
             }
-        } else if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
+        } else if (mode == ChangeMode.SET || mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
             if (delta != null && delta instanceof AttributeModifierWrapper[] wrappers) {
                 for (ItemType item : getExpr().getArray(event)) {
                     ItemMeta meta = item.getItemMeta();
-                    for (AttributeModifierWrapper wrapper : wrappers) {
-                        if (mode == ChangeMode.ADD) {
-                            meta.addAttributeModifier(wrapper.getAttribute(), wrapper.getModifier());
-                            // throws an IllegalArgumentException stack trace when trying to add a modifier
-                            // to an item which already has a modifier with the same uuid.
-                        } else if (mode == ChangeMode.REMOVE) {
-                            meta.removeAttributeModifier(wrapper.getAttribute(), wrapper.getModifier());
+                    if (mode == ChangeMode.SET) {
+                        Multimap<Attribute, AttributeModifier> map = ModifierUtils.convertWrappers(wrappers);
+                        meta.setAttributeModifiers(map);
+                    } else if (mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
+                        for (AttributeModifierWrapper wrapper : wrappers) {
+                            Attribute attribute = wrapper.getAttribute();
+                            AttributeModifier modifier = wrapper.getModifier();
+                            if (mode == ChangeMode.ADD) {
+                                AttributeModifierWrapper conflict = ModifierUtils.getConflictingModifier(meta, modifier);
+                                if (conflict != null) {
+                                    meta.removeAttributeModifier(conflict.getAttribute(), conflict.getModifier());
+                                }
+                                meta.addAttributeModifier(attribute, modifier);
+                            } else if (mode == ChangeMode.REMOVE) {
+                                meta.removeAttributeModifier(attribute, modifier);
+                            }
                         }
                     }
                     item.setItemMeta(meta);
