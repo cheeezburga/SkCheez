@@ -20,7 +20,7 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
 
     static {
         Skript.registerExpression(ExprAttrModifierCreate.class, AttributeModifierWrapper.class, ExpressionType.COMBINED,
-                "[new] %attributetype% [attribute] modifier (named|with name|with id) %string% with amount %number% [with operation %attributemodifieroperation%] " +
+                "[new] %attributetype% [attribute] modifier (named|with name|with id) %string% with amount %number% [with operation %-attributemodifieroperation%] " +
                 "[with uuid %-string%] [for [equipment] slot %-equipmentslot%]");
     }
 
@@ -46,12 +46,12 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
     @SuppressWarnings("NullableProblems")
     @Override
     protected @Nullable AttributeModifierWrapper[] get(Event event) {
-        if (this.type == null || this.name == null || this.amount == null) return null;
+        if (this.type == null || this.name == null || this.amount == null) { return null; }
 
         Attribute type = this.type.getSingle(event);
         String name = this.name.getSingle(event);
         Number amount = this.amount.getSingle(event);
-        if (type == null || name == null || amount == null) return null;
+        if (type == null || name == null || amount == null) { return null; }
 
         AttributeModifier toWrap;
 
@@ -93,8 +93,9 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
+        // come back and make this better
         String type = this.type.toString(event, b);
-        String name = " attribute modifier with name " + this.name.toString(event, b);
+        String name = " EXPR attribute modifier with name " + this.name.toString(event, b);
         String amount = " with amount " + this.amount.toString(event, b);
         String operation = this.operation != null ? " with operation " + this.operation.toString(event, b) : "";
         String uuid = this.uuid != null ? " with uuid " + this.uuid.toString(event, b) : "";
