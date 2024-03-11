@@ -2,7 +2,6 @@ package me.cheezburga.skcheez.api.wrapper;
 
 import me.cheezburga.skcheez.api.modifiers.ModifierUtils;
 import me.cheezburga.skcheez.api.util.Utils;
-import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
