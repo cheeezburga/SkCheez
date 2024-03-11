@@ -19,8 +19,9 @@ public final class SkCheez extends JavaPlugin {
             return;
         }
         instance = this;
+        loadMetrics();
         try {
-            addon = Skript.registerAddon(this)
+            this.addon = Skript.registerAddon(this)
                     .loadClasses("me.cheezburga.skcheez", "elements")
                     .setLanguageFileDirectory("lang");
         } catch (IOException e) {
@@ -28,9 +29,9 @@ public final class SkCheez extends JavaPlugin {
         }
     }
 
-    @Override
-    public void onDisable() {
-        // Plugin shutdown logic
+    private void loadMetrics() {
+        Metrics metrics = new Metrics(this, 21303);
+        metrics.addCustomChart(new Metrics.SimplePie("skriptVersion", () -> Skript.getVersion().toString()));
     }
 
     public static SkCheez getInstance() {
