@@ -5,14 +5,11 @@ import ch.njol.skript.classes.Parser;
 import ch.njol.skript.classes.ClassInfo;
 import ch.njol.skript.lang.ParseContext;
 import ch.njol.skript.registrations.Classes;
-import ch.njol.util.coll.CollectionUtils;
 import me.cheezburga.skcheez.api.wrapper.AttributeModifierWrapper;
 import me.cheezburga.skcheez.api.wrapper.EnumWrapper;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
-import org.jetbrains.annotations.Nullable;
 
 public class Types {
 
