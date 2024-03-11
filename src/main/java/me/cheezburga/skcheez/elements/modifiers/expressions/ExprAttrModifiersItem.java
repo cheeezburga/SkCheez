@@ -9,7 +9,6 @@ import ch.njol.skript.doc.Name;
 import ch.njol.skript.doc.Since;
 import ch.njol.skript.expressions.base.PropertyExpression;
 import ch.njol.skript.lang.Expression;
-import ch.njol.skript.lang.ExpressionType;
 import ch.njol.skript.lang.SkriptParser.ParseResult;
 import ch.njol.util.Kleenean;
 import ch.njol.util.coll.CollectionUtils;
@@ -30,16 +29,17 @@ import java.util.List;
 @Name("Attribute Modifiers - Item")
 @Description("Gets the attribute modifiers of a given item.")
 @Examples({"set {_modifiers::*} to attribute modifiers on player's tool",
-        "set {_attackSpeed::*} to modifiers on player's tool where [attribute of input is attack speed]"})
+        "set {_attackSpeed::*} to modifiers of player's tool where [modifier attribute of input is attack speed]",
+        "add {_modifier} to modifiers of {_item}",
+        "add {_modifiers::*} to modifiers of {_item}",
+        "remove {_modifier} from modifiers of {_item}",
+        "reset modifiers of {_item}"})
 @Since("1.0.0")
 
 public class ExprAttrModifiersItem extends PropertyExpression<ItemType, AttributeModifierWrapper> {
 
     static {
-        // ideally this would be able to get more specific modifiers too
-        // it's a property expression tho so idk if thats doable? can just use a filter in skript tho tbf
-        Skript.registerExpression(ExprAttrModifiersItem.class, AttributeModifierWrapper.class, ExpressionType.PROPERTY,
-                "[the] [attribute] modifiers (on|of) %itemtype%");
+        register(ExprAttrModifiersItem.class, AttributeModifierWrapper.class, "[attribute] modifiers", "itemtypes");
     }
 
     @SuppressWarnings({"NullableProblems", "unchecked"})
