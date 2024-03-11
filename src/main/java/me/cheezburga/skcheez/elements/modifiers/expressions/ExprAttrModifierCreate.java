@@ -14,6 +14,7 @@ import org.bukkit.inventory.EquipmentSlot;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 
+import java.util.StringJoiner;
 import java.util.UUID;
 
 public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWrapper> {
@@ -93,13 +94,13 @@ public class ExprAttrModifierCreate extends SimpleExpression<AttributeModifierWr
 
     @Override
     public @NotNull String toString(@Nullable Event event, boolean b) {
-        // come back and make this better
-        String type = this.type.toString(event, b);
-        String name = " EXPR attribute modifier with name " + this.name.toString(event, b);
-        String amount = " with amount " + this.amount.toString(event, b);
-        String operation = this.operation != null ? " with operation " + this.operation.toString(event, b) : "";
-        String uuid = this.uuid != null ? " with uuid " + this.uuid.toString(event, b) : "";
-        String slot = this.slot != null ? " with slot " + this.slot.toString(event, b) : "";
-        return type + name + amount + operation + uuid + slot;
+        StringJoiner joiner = new StringJoiner(";");
+        joiner.add("attribute=" + this.type.toString(event, b));
+        joiner.add("name=" + this.name.toString(event, b));
+        joiner.add("amount=" + this.amount.toString(event, b));
+        joiner.add("operation=" + (this.operation != null ? this.operation.toString(event, b) : ""));
+        joiner.add("slot=" + (this.slot != null ? this.slot.toString(event, b) : ""));
+        joiner.add("uuid=" + (this.uuid != null ? this.uuid.toString(event, b) : ""));
+        return joiner.toString();
     }
 }
