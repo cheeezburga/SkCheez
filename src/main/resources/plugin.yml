@@ -1,8 +1,17 @@
+main: me.cheezburga.skcheez.SkCheez
 name: SkCheez
 version: '${project.version}'
-main: me.cheezburga.skcheez.SkCheez
+description: "A Skript addon which adds useful features to your server."
 api-version: '1.17'
+author: cheezburga
+website: https://github.com/cheeezburga/SkCheez/
 depend:
   - Skript
-authors:
-  - cheezburga
+commands:
+    skcheez:
+        description: Main SkCheez command
+        permission: skcheez.command
+permissions:
+    skcheez.command:
+        default: op
+        description: Permission to use SkCheez's main command
