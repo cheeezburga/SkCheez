@@ -24,7 +24,7 @@ public class Types {
                             "Due to the complexity of these, they cannot be stored in variables long term.")
                     .examples("set {_m} to attribute modifier named \"example\" with amount 4 with operation add number")
                     .since("1.0.0")
-                    .parser(new Parser<AttributeModifierWrapper>() {
+                    .parser(new Parser<>() {
                         @Override
                         public @NotNull String toString(@NotNull AttributeModifierWrapper o, int flags) {
                             return o.toString();
