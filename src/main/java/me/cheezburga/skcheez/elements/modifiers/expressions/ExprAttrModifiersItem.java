@@ -1,6 +1,5 @@
 package me.cheezburga.skcheez.elements.modifiers.expressions;
 
-import ch.njol.skript.Skript;
 import ch.njol.skript.aliases.ItemType;
 import ch.njol.skript.classes.Changer.ChangeMode;
 import ch.njol.skript.doc.Description;
