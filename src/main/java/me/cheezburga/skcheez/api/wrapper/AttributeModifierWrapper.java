@@ -1,6 +1,8 @@
 package me.cheezburga.skcheez.api.wrapper;
 
+import me.cheezburga.skcheez.api.modifiers.ModifierUtils;
 import me.cheezburga.skcheez.api.util.Utils;
+import org.bukkit.Bukkit;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
 import org.bukkit.attribute.AttributeModifier.Operation;
@@ -71,11 +73,11 @@ public class AttributeModifierWrapper {
         if (!isValid()) { return null; }
         else {
             StringJoiner joiner = new StringJoiner(",");
-            joiner.add("{AttributeName:\"" + attribute.toString() + "\"");
-            joiner.add("Name:" + modifier.getName());
+            joiner.add("{AttributeName:\"" + attribute.getKey().asString().substring(10) + "\"");
+            joiner.add("Name:\"" + modifier.getName() + "\"");
             joiner.add("Amount:" + modifier.getAmount());
             joiner.add("Operation:" + modifier.getOperation().ordinal());
-            if (modifier.getSlot() != null) { joiner.add("Slot:" + modifier.getSlot().toString()); }
+            if (modifier.getSlot() != null) { joiner.add("Slot:" + ModifierUtils.getSlotNBTString(modifier.getSlot())); }
             joiner.add("UUID:" + Utils.uuidIntArrayToString(Utils.uuidToIntArray(modifier.getUniqueId())) + "}");
 
             return joiner.toString();
