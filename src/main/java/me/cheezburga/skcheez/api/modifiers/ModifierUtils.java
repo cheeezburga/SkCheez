@@ -5,6 +5,7 @@ import com.google.common.collect.Multimap;
 import me.cheezburga.skcheez.api.wrapper.AttributeModifierWrapper;
 import org.bukkit.attribute.Attribute;
 import org.bukkit.attribute.AttributeModifier;
+import org.bukkit.inventory.EquipmentSlot;
 import org.bukkit.inventory.meta.ItemMeta;
 import org.jetbrains.annotations.Nullable;
 
@@ -37,5 +38,13 @@ public class ModifierUtils {
             }
         }
         return null;
+    }
+
+    public static String getSlotNBTString(EquipmentSlot slot) {
+        return switch (slot) {
+            case HAND -> "mainhand";
+            case OFF_HAND -> "offhand";
+            case HEAD, CHEST, LEGS, FEET -> slot.toString().toLowerCase();
+        };
     }
 }
