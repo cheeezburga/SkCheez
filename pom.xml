@@ -6,7 +6,7 @@
 
   <groupId>me.cheezburga</groupId>
   <artifactId>SkCheez</artifactId>
-  <version>1.0</version>
+  <version>0.1.0-beta</version>
   <packaging>jar</packaging>
 
   <name>SkCheez</name>
