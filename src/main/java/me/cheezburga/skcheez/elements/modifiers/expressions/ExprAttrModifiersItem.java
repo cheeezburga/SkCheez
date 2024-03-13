@@ -74,7 +74,7 @@ public class ExprAttrModifiersItem extends PropertyExpression<ItemType, Attribut
     @Override
     public Class<?> @Nullable [] acceptChange(ChangeMode mode) {
         if (mode == ChangeMode.SET || mode == ChangeMode.ADD || mode == ChangeMode.REMOVE) {
-            return CollectionUtils.array(AttributeModifierWrapper.class);
+            return CollectionUtils.array(AttributeModifierWrapper[].class);
         } else if (mode == ChangeMode.RESET || mode == ChangeMode.DELETE) {
             return CollectionUtils.array();
         }
