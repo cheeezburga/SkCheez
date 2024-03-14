@@ -37,7 +37,7 @@ public class ExprAttrModifierProperties extends SimpleExpression<Object> {
 
     static {
         Skript.registerExpression(ExprAttrModifierProperties.class, Object.class, ExpressionType.COMBINED,
-                "[attribute[ ]] modifier attribute of %attributemodifiers%",
+                "[attribute[ ]]modifier attribute of %attributemodifiers%",
                 "[attribute[ ]]modifier name of %attributemodifiers%",
                 "[attribute[ ]]modifier (amount|increment) of %attributemodifiers%",
                 "[attribute[ ]]modifier operat(or|ion) of %attributemodifiers%",
